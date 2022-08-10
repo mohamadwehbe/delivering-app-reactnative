@@ -1,7 +1,8 @@
 import { LocationGeocodedAddress } from "expo-location";
 
 export interface Category {
-    title: string,
+    id: string;
+    title: string;
     icon: string
 }
 
@@ -12,7 +13,7 @@ export interface FoodModel {
     category: string;
     price: number;
     readyTime: number;
-    image: [string];
+    images: [string];
 }
 
 export interface Restaurant {
@@ -44,6 +45,6 @@ export interface UserState {
     error: string | undefined;
 }
 
-export interface ShoppinState{
+export interface ShoppinState {
     availability: FoodAvailability;
 }

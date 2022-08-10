@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Image, ScrollView, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ApplicationState, onAvailability, ShoppinState, UserState } from '../redux'
 import { connect } from 'react-redux'
-import { SearchBar } from '../components'
+import { SearchBar, ButtonWithIcon, CategoryCard, RestaurantCard } from '../components'
 import { useNavigation } from '../utils'
 
 interface HomeProps {
@@ -42,20 +42,46 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
                         Edit
                     </Text>
                 </View>
-                <View style={{ flex: 8, backgroundColor: 'green' }}>
+                <View style={{ display: 'flex', height: 60, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', marginLeft: 4 }}>
                     <SearchBar
                         didTouch={() => {
                             navigate('SearchPage')
                         }}
                         onTextChange={() => { }}
                     />
+                    <ButtonWithIcon onTap={() => { }} icon={require('../images/hambar.png')} width={50} height={40} />
                 </View>
             </View>
             <View style={styles.body}>
-                <Text>Home Screen</Text>
-            </View>
-            <View style={styles.footer}>
-                <Text>Footer</Text>
+                <ScrollView>
+                    <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={categories}
+                        renderItem={({ item }) => <CategoryCard item={item} onTap={() => { alert('category tapped') }} />}
+                        keyExtractor={(item) => `${item.id}`}
+                    />
+                    <View>
+                        <Text style={{ fontSize: 25, fontWeight: '600', color: '#f15b5d' }}>Top Restaurants</Text>
+                    </View>
+                    <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={restaurants}
+                        renderItem={({ item }) => <RestaurantCard item={item} onTap={() => { alert('category tapped') }} />}
+                        keyExtractor={(item) => `${item._id}`}
+                    />
+                    <View>
+                        <Text style={{ fontSize: 25, fontWeight: '600', color: '#f15b5d' }}>30 Minutes Foods</Text>
+                    </View>
+                    <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={foods}
+                        renderItem={({ item }) => <RestaurantCard item={item} onTap={() => { alert('category tapped') }} />}
+                        keyExtractor={(item) => `${item._id}`}
+                    />
+                </ScrollView>
             </View>
         </View>
     )
@@ -64,21 +90,15 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'green'
+        backgroundColor: '#fff'
     },
     navigation: {
         flex: 2,
-        backgroundColor: 'red'
     },
     body: {
         flex: 9,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'yellow'
-    },
-    footer: {
-        flex: 1,
-        backgroundColor: 'cyan'
     }
 })
 
