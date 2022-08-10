@@ -1,11 +1,15 @@
-import { LocationGeocodedAddress } from "expo-location";
+import { LocationGeocodedAddress } from 'expo-location'
 
+
+// category
 export interface Category {
-    id: string;
-    title: string;
-    icon: string
+    id: string,
+    title: String,
+    icon: String
 }
 
+
+// Food Model
 export interface FoodModel {
     _id: string;
     name: string;
@@ -14,8 +18,10 @@ export interface FoodModel {
     price: number;
     readyTime: number;
     images: [string];
+    unit: number;
 }
 
+//Restaurant Model
 export interface Restaurant {
     _id: string;
     name: string;
@@ -29,22 +35,29 @@ export interface Restaurant {
 export interface FoodAvailability {
     categories: [Category];
     restaurants: [Restaurant];
-    foods: [FoodModel];
+    foods: [FoodModel]
 }
 
+//todo : Modify later
+//User Model
 export interface UserModel {
     firstName: string;
-    lastName: string;
-    contactNumber: string;
-    token: string;
+    lastName: String;
+    contactNumber: String;
+    token: string,
+    varified: boolean
 }
 
 export interface UserState {
     user: UserModel;
     location: LocationGeocodedAddress;
     error: string | undefined;
+    Cart: [FoodModel];
+    //orders
 }
 
-export interface ShoppinState {
-    availability: FoodAvailability;
+export interface ShoppingState {
+    availability: FoodAvailability,
+    availableFoods: [FoodModel]
+    //other models
 }

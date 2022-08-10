@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet, Dimensions, Image, ScrollView, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ApplicationState, onAvailability, ShoppinState, UserState } from '../redux'
+import { ApplicationState, FoodModel, onSearchFoods, onAvailability, Restaurant, ShoppingState, UserState } from '../redux'
 import { connect } from 'react-redux'
 import { SearchBar, ButtonWithIcon, CategoryCard, RestaurantCard } from '../components'
 import { useNavigation } from '../utils'
 
 interface HomeProps {
     userReducer: UserState,
-    shoppingReducer: ShoppinState,
-    onAvailability: Function
+    shoppingReducer: ShoppingState,
+    onAvailability: Function,
+    onSearchFoods: Function
 }
 
 const _HomeScreen: React.FC<HomeProps> = (props) => {
@@ -20,7 +21,18 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
 
     useEffect(() => {
         props.onAvailability()
+        setTimeout(() => {
+            props.onSearchFoods()
+        }, 1000);
     }, [])
+
+    const onTapRestaurant = (item: Restaurant) => {
+        navigate('RestaurantPage', { restaurant: item })
+    }
+
+    const onTapFood = (item: FoodModel) => {
+        navigate('FoodDetailPage', { food: item })
+    }
 
     return (
         <View style={styles.container}>
@@ -68,7 +80,7 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         data={restaurants}
-                        renderItem={({ item }) => <RestaurantCard item={item} onTap={() => { alert('category tapped') }} />}
+                        renderItem={({ item }) => <RestaurantCard item={item} onTap={onTapRestaurant} />}
                         keyExtractor={(item) => `${item._id}`}
                     />
                     <View>
@@ -78,7 +90,7 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         data={foods}
-                        renderItem={({ item }) => <RestaurantCard item={item} onTap={() => { alert('category tapped') }} />}
+                        renderItem={({ item }) => <RestaurantCard item={item} onTap={onTapFood} />}
                         keyExtractor={(item) => `${item._id}`}
                     />
                 </ScrollView>
@@ -107,6 +119,6 @@ const mapToStateProps = (state: ApplicationState) => ({
     shoppingReducer: state.shoppingReducer
 })
 
-const HomeScreen = connect(mapToStateProps, { onAvailability })(_HomeScreen)
+const HomeScreen = connect(mapToStateProps, { onAvailability, onSearchFoods })(_HomeScreen)
 
 export { HomeScreen }

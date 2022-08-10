@@ -1,29 +1,80 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
+import { connect } from 'react-redux'
+import { ApplicationState, FoodModel, ShoppingState, UserState } from '../redux'
 
-interface SearchScreenProps { }
+import { ButtonWithIcon, FoodCard, SearchBar } from '../components'
+import { FlatList } from 'react-native-gesture-handler'
 
-const SearchScreen: React.FC<SearchScreenProps> = ({ }) => {
+
+import { useNavigation } from '../utils'
+
+interface SearchScreenProps {
+    userReducer: UserState,
+    shoppingReducer: ShoppingState,
+    onUpdateCart: Function,
+}
+
+
+const _SearchScreen: React.FC<SearchScreenProps> = (props) => {
+
+    const { navigate } = useNavigation()
+
+    const [isEditing, setIsEditing] = useState(false)
+    const [keyword, setKeyword] = useState('')
+
+    const { availableFoods } = props.shoppingReducer;
+
+    const onTapFood = (item: FoodModel) => {
+        navigate('FoodDetailPage', { food: item })
+    }
+
+
     return (
         <View style={styles.container}>
             <View style={styles.navigation}>
-                <Text>Navigation</Text>
+                <View style={{ display: 'flex', height: 60, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', marginLeft: 4 }}>
+                    <ButtonWithIcon icon={require('../images/back_arrow.png')} onTap={() => navigate("HomePage")} width={40} height={50} />
+                    <SearchBar onTextChange={setKeyword} onEndEditing={() => setIsEditing(false)} didTouch={() => setIsEditing(true)} />
+                </View>
             </View>
+
             <View style={styles.body}>
-                <Text>Search Screen</Text>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={
+                        isEditing
+                            ?
+                            availableFoods.filter((item) => {
+                                return item.name.includes(keyword)
+                            })
+                            : availableFoods
+                    }
+                    renderItem={({ item }) => <FoodCard item={item} onTap={onTapFood} />}
+                    keyExtractor={item => `${item._id}`}
+                />
+
             </View>
-            <View style={styles.footer}>
-                <Text>Footer Content</Text>
-            </View>
-        </View>
-    )
+        </View>)
 }
 
-export default SearchScreen
+
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: 'green' },
-    navigation: { flex: 2, backgroundColor: 'red' },
-    body: { flex: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow' },
+    container: { flex: 1, backgroundColor: '#F2F2F2' },
+    navigation: { flex: 1, marginTop: 43, },
+    body: { flex: 10, justifyContent: 'center', alignItems: 'center' },
     footer: { flex: 1, backgroundColor: 'cyan' }
 })
+
+
+
+const mapStateToProps = (state: ApplicationState) => ({
+    shoppingReducer: state.shoppingReducer,
+    userReducer: state.userReducer
+})
+
+
+const SearchScreen = connect(mapStateToProps, {})(_SearchScreen)
+
+export { SearchScreen }

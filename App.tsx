@@ -7,7 +7,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { HomeScreen } from './src/screens/HomeScreen';
 import { Provider } from 'react-redux';
 import { store } from './src/redux'
-import SearchScreen from './src/screens/SearchScreen';
+import RestaurantScreen from './src/screens/RestaurantScreen';
+import FoodDetailScreen from './src/screens/FoodDetailScreen';
+import { SearchScreen } from './src/screens/SearchScreen';
 
 const switchNavigator = createSwitchNavigator({
 
@@ -25,7 +27,9 @@ const switchNavigator = createSwitchNavigator({
     home: {
       screen: createStackNavigator({
         HomePage: HomeScreen,
-        SearchPage: SearchScreen
+        SearchPage: SearchScreen,
+        RestaurantPage: RestaurantScreen,
+        FoodDetailPage: FoodDetailScreen
       }, {
         defaultNavigationOptions: {
           headerShown: false
