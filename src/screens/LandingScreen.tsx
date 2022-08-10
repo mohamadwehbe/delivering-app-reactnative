@@ -3,7 +3,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import * as Location from 'expo-location'
 
 import { useNavigation } from '../utils'
-import { ApplicationStore, onUpdateLocation, UserState } from '../redux';
+import { ApplicationState, onUpdateLocation, UserState } from '../redux';
 import { connect } from 'react-redux';
 
 const screenWidth = Dimensions.get('screen').width;
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapToStateProps = (state: ApplicationStore) => ({
+const mapToStateProps = (state: ApplicationState) => ({
     useReducer: state.userReducer
 })
 

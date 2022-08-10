@@ -18,8 +18,8 @@ export type ShoppingAction = AvailabilityAction | ShoppingErrorAction;
 export const onAvailability = () => {
     return async (dispatch: Dispatch<ShoppingAction>) => {
 
-        const response = await axios.get<FoodAvailability>(`${BASE_URL}/food/availability/78787878`)
-
+        const response = await axios.get<FoodAvailability>(`${BASE_URL}food/availability/78787878`)
+        //console.log(response)
         if (!response) {
             dispatch({
                 type: 'ON_SHOPPING_ERROR',

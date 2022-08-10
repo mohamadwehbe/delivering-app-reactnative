@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
-import React from 'react'
-import { ApplicationStore, onAvailability, ShoppinState, UserState } from '../redux'
+import React, { useEffect, useState } from 'react'
+import { ApplicationState, onAvailability, ShoppinState, UserState } from '../redux'
 import { connect } from 'react-redux'
+import { SearchBar } from '../components'
+import { useNavigation } from '../utils'
 
 interface HomeProps {
     userReducer: UserState,
@@ -13,11 +15,41 @@ const _HomeScreen: React.FC<HomeProps> = (props) => {
 
     const { location } = props.userReducer;
     const { availability } = props.shoppingReducer;
+    const { categories, foods, restaurants } = availability;
+    const { navigate } = useNavigation();
+
+    useEffect(() => {
+        props.onAvailability()
+    }, [])
 
     return (
         <View style={styles.container}>
             <View style={styles.navigation}>
-                <Text>Navigation {JSON.stringify(location)}</Text>
+                <View style={{
+                    marginTop: 50,
+                    flex: 4,
+                    backgroundColor: 'white',
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                    flexDirection: 'row'
+                }}>
+                    <Text>
+                        {location.name},{location.street},{location.city}
+                    </Text>
+                    <Text>
+                        Edit
+                    </Text>
+                </View>
+                <View style={{ flex: 8, backgroundColor: 'green' }}>
+                    <SearchBar
+                        didTouch={() => {
+                            navigate('SearchPage')
+                        }}
+                        onTextChange={() => { }}
+                    />
+                </View>
             </View>
             <View style={styles.body}>
                 <Text>Home Screen</Text>
@@ -50,8 +82,8 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapToStateProps = (state: ApplicationStore) => ({
-    useReducer: state.userReducer,
+const mapToStateProps = (state: ApplicationState) => ({
+    userReducer: state.userReducer,
     shoppingReducer: state.shoppingReducer
 })
 
